@@ -9,6 +9,7 @@
     <modules>
 
         <module>common</module>
+        <module>lambda</module>
 
     </modules>
     <name>calorie-tracker-backend-serverless</name>

@@ -1,0 +1,170 @@
+Resources:
+  LambdaDynamoDbReadRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: drash-lambda-dynamodb-readonly-${self:provider.stage}
+      Description: Role to allow Lambda read access to DynamoDb
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref DynamoDbReadPolicy
+        - !Ref CloudWatchPolicy
+        - !Ref XrayPolicy
+
+  LambdaDynamoDbReadWriteRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: drash-lambda-dynamodb-readwrite-${self:provider.stage}
+      Description: Role to allow Lambda read and write access to DynamoDb
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref DynamoDbReadPolicy
+        - !Ref DynamoDbWritePolicy
+        - !Ref CloudWatchPolicy
+        - !Ref XrayPolicy
+
+  LambdaEventPublisherRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: drash-lambda-event-publisher-${self:provider.stage}
+      Description: Role for Lambda functions that are capable of publishing events to Amazon Event Bridge
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref CloudWatchPolicy
+        - !Ref PutEventsPolicy
+        - !Ref XrayPolicy
+
+  LambdaEventConsumerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: drash-lambda-event-consumer-${self:provider.stage}
+      Description: Role for Lambda functions that triggered by events from Amazon Event Bridge
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - !Ref DynamoDbReadPolicy
+        - !Ref DynamoDbWritePolicy
+        - !Ref CloudWatchPolicy
+        - !Ref InvokeLambdaPolicy
+        - !Ref IotFullAccessPolicy
+        - !Ref S3IotCertsBucketReadPolicy
+        - !Ref XrayPolicy
+
+  DynamoDbReadPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: drash-dynamodb-readonly-${self:provider.stage}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - "dynamodb:List*"
+              - "dynamodb:GetItem"
+              - "dynamodb:Query"
+              - "dynamodb:Scan"
+              - "dynamodb:BatchGetItem"
+            Resource:
+              - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.drashTableName}
+          - Effect: Allow
+            Action:
+              - "dynamodb:Query"
+              - "dynamodb:Scan"
+            Resource:
+              - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.drashTableName}/index/*
+
+  DynamoDbWritePolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: drash-dynamodb-write-${self:provider.stage}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - "dynamodb:PutItem"
+              - "dynamodb:UpdateItem"
+              - "dynamodb:Delete*"
+              - "dynamodb:BatchWriteItem"
+            Resource:
+              - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.drashTableName}
+
+  CloudWatchPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: drash-cloudwatch-${self:provider.stage}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource:
+              - 'Fn::Join':
+                  - ':'
+                  -
+                    - 'arn:aws:logs'
+                    - Ref: 'AWS::Region'
+                    - Ref: 'AWS::AccountId'
+                    - 'log-group:/aws/lambda/*:*:*'
+
+  S3PutPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: drash-s3-put-${self:provider.stage}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - "s3:PutObject"
+            Resource:
+              - !GetAtt CsvUploadBucket.Arn
+              - !GetAtt CsvResultsBucket.Arn
+
+  InvokeLambdaPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: drash-lambda-invoke-${self:provider.stage}
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - "lambda:InvokeFunction"
+              - "lambda:InvokeAsync"
+            Resource:
+              - arn:aws:lambda:${self:provider.region}:*:function:${self:custom.scraperFunctionName}
+              - arn:aws:lambda:${self:provider.region}:*:function:${self:custom.articleSearchFunctionName}

@@ -1,0 +1,18 @@
+{
+  "name": "calorie-tracker",
+  "version": "1.0.0-SNAPSHOT",
+  "description": "Calorie Tracker on Java Serverless Platform",
+  "devDependencies": {
+    "serverless": "^2.65.0",
+    "serverless-domain-manager": "^5.2.0",
+    "serverless-dotenv-plugin": "^3.10.0",
+    "serverless-prune-plugin": "^1.6.1",
+    "serverless-reqvalidator-plugin": "^2.0.0"
+  },
+  "scripts": {
+    "deploy": "sls create_domain && sls deploy",
+    "deploy:staging": "sls create_domain --stage staging && sls deploy --stage staging",
+    "deploy:prod": "sls create_domain --stage production && sls deploy --stage production"
+  },
+  "author": "Drashti Dobariya",
+}

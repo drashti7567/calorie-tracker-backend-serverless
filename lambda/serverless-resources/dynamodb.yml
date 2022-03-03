@@ -1,0 +1,60 @@
+Resources:
+  DRASHTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.DRASHTableName}
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+        - AttributeName: ENTITY_TYPE
+          AttributeType: S
+        - AttributeName: GS1PK
+          AttributeType: S
+        - AttributeName: GS1SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: IDX_ENTITY_TYPE
+          KeySchema:
+            - AttributeName: ENTITY_TYPE
+              KeyType: HASH
+          Projection:
+            ProjectionType: 'INCLUDE'
+            NonKeyAttributes:
+              - ENABLED
+              - CUSTOM
+              - EMAIL_STATUS
+          ProvisionedThroughput:
+            ReadCapacityUnits: ${env:DRASH_DYNAMO_GSI_READ_CAPACITY}
+            WriteCapacityUnits: ${env:DRASH_DYNAMO_GSI_WRITE_CAPACITY}
+        - IndexName: IDX_ENTITY_TYPE_AND_SK
+          KeySchema:
+            - AttributeName: ENTITY_TYPE
+              KeyType: HASH
+            - AttributeName: SK
+              KeyType: RANGE
+          Projection:
+            ProjectionType: 'KEYS_ONLY'
+          ProvisionedThroughput:
+            ReadCapacityUnits: ${env:DRASH_DYNAMO_GSI_READ_CAPACITY}
+            WriteCapacityUnits: ${env:DRASH_DYNAMO_GSI_WRITE_CAPACITY}
+        - IndexName: GS1
+          KeySchema:
+            - AttributeName: GS1PK
+              KeyType: HASH
+            - AttributeName: GS1SK
+              KeyType: RANGE
+          Projection:
+            ProjectionType: 'KEYS_ONLY'
+          ProvisionedThroughput:
+            ReadCapacityUnits: ${env:DRASH_DYNAMO_GSI_READ_CAPACITY}
+            WriteCapacityUnits: ${env:DRASH_DYNAMO_GSI_WRITE_CAPACITY}
+      ProvisionedThroughput:
+        ReadCapacityUnits: ${env:DRASH_DYNAMO_READ_CAPACITY}
+        WriteCapacityUnits: ${env:DRASH_DYNAMO_WRITE_CAPACITY}
