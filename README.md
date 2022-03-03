@@ -4,6 +4,7 @@ This repository hosts the files a small demo of java serverless backend implemen
 ## Modules
 This is a multi-module Maven Project.
 * **[common](common/README.md)** - Module containing commonly used codes and libraries
+* **[persistence](persistence/README.md)** - Module containing persistence-related codes for integrating with AWS DynamoDB.
 
 ## Setup
 ### Prerequisites
