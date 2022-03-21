@@ -12,6 +12,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>lambda-common</module>
+        <module>entry-model-mapper</module>
+        <module>get-all-entries-lambda</module>
     </modules>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>

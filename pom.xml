@@ -10,6 +10,8 @@
 
         <module>common</module>
         <module>lambda</module>
+        <module>persistence</module>
+        <module> aws-core-component</module>
 
     </modules>
     <name>calorie-tracker-backend-serverless</name>

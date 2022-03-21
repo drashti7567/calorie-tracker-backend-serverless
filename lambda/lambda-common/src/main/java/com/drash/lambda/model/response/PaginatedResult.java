@@ -1,6 +1,5 @@
 package com.drash.lambda.model.response;
 
-import com.drash.lambda.model.response.ImmutablePaginatedResult;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.immutables.value.Value;
