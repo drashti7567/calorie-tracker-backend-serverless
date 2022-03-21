@@ -20,14 +20,14 @@ provider:
 
   # you can define service wide environment variables here
   environment:
-    OTTO_AWS_REGION: ${self:provider.region}
-    OTTO_AWS_COGNITO_USERPOOL_ID: !Ref CognitoUserPool
-    OTTO_AWS_ACCOUNT_ID: !Ref AWS::AccountId
-    OTTO_AWS_IDENTITY_POOL_ID: !Ref CognitoIdentityPool
-    OTTO_DEPLOYMENT_STAGE: ${self:provider.stage}
-    OTTO_TABLE_NAME: ${self:custom.ottoTableName}
-    OTTO_EVENT_BUS_NAME: ${self:custom.eventBus}
-    OTTO_EVENT_SOURCE: ${self:custom.eventSource}
+    DRASH_AWS_REGION: ${self:provider.region}
+    DRASH_AWS_COGNITO_USERPOOL_ID: !Ref CognitoUserPool
+    DRASH_AWS_ACCOUNT_ID: !Ref AWS::AccountId
+    DRASH_AWS_IDENTITY_POOL_ID: !Ref CognitoIdentityPool
+    DRASH_DEPLOYMENT_STAGE: ${self:provider.stage}
+    DRASH_TABLE_NAME: ${self:custom.ottoTableName}
+    DRASH_EVENT_BUS_NAME: ${self:custom.eventBus}
+    DRASH_EVENT_SOURCE: ${self:custom.eventSource}
 
 
 package:
