@@ -14,6 +14,7 @@
         <module>lambda-common</module>
         <module>entry-model-mapper</module>
         <module>get-all-entries-lambda</module>
+        <module>get-entry-lambda</module>
         <module>delete-entry-lambda</module>
         <module>update-entry-lambda</module>
         <module>create-entry-lambda</module>
