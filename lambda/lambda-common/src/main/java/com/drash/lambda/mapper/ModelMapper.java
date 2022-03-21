@@ -5,7 +5,7 @@ package com.drash.lambda.mapper;
  *
  * @param <S> The runtime type of the source object
  * @param <D> The runtime type of the destination object
- * @author arjay,nacion
+ * @author drashti.dobariya
  */
 public interface ModelMapper<S, D> {
 
