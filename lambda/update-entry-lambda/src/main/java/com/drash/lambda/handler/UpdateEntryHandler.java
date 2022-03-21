@@ -13,6 +13,7 @@ import com.drash.persistence.repo.EntryRepo;
 import com.drash.persistence.repo.UserRepo;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UpdateEntryHandler extends BaseRequestHandler<UpdateEntryModel> {
@@ -60,7 +61,7 @@ public class UpdateEntryHandler extends BaseRequestHandler<UpdateEntryModel> {
         entry.setPk(input.userEmail());
         entry.setCalories(input.calories());
         entry.setSk(input.eatingTime());
-
+        entry.setUpdatedAt(LocalDateTime.now());
         entryRepo.save(entry);
     }
 }
