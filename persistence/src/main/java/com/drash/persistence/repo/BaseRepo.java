@@ -104,6 +104,19 @@ public abstract class BaseRepo<E extends BaseEntity> {
     }
 
     /**
+     * Gets an entity by it's primary key.
+     *
+     * @param pk The partition key value
+     * @return Entity identified by the given key values
+     */
+    public final Optional<E> get(final String pk) {
+        return Optional.ofNullable(this.table.getItem(
+                Key.builder()
+                        .partitionValue(pk)
+                        .build()));
+    }
+
+    /**
      * Gets an instance of entity with the given Hash/Partition key and Sort/Range key.
      * If none is found, creates a new instance instead.
      *
