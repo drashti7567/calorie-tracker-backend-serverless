@@ -12,6 +12,7 @@
         <module>lambda</module>
         <module>persistence</module>
         <module> aws-core-component</module>
+        <module>lambda-invoker</module>
 
     </modules>
     <name>calorie-tracker-backend-serverless</name>
